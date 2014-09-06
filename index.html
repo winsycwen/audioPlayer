@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 Audio Player with Playelist</title>
+    <script type="text/javascript" src="jquery/jquery-2.1.1.min.js"></script>
+    <link rel="stylesheet" href="stylesheet/index.css"/>
+    <script type="text/javascript">
+    function AudioObj() {
+        var that = this;
+        if(AudioObj.unique !== undefined) {
+            return AudioObj.unique;
+        }
+        AudioObj.unique = this;
+        this.playList = [];
+        this.currentIndex = 0;
+        this.getPlayList = function() {
+            //生成歌曲列表
+            $.getJSON("audio.json",function(data) {
+                $(".playlist-box").append("<ol id='audio-playlist'></ol>");
+                $.each(data, function(key, val){
+                    var $audioItem = $("<li>");
+                    var $title = $("<span>").addClass("title").attr("data-id",val.id).html(val.title);
+                    $audioItem.append($title);
+                    $("#audio-playlist").append($audioItem);
+                    $audioItem.click(function(){
+                        that.switchAudio(this);
+                    });
+                });
+                $("#audio-playlist li").first().addClass("hovered");
+            });
+        };
+        this.switchAudio = function(target) {
+             //切换歌曲
+            var $audio = $(target);
+            var $title = $audio.find(".title").html();
+            var $musician = $audio.find(".audio-item");
+            $("#audio-title").html($title);
+            this.currentIndex = target;
+        };
+        this.start = function() {
+            //播放当前歌曲
+        };
+        this.next = function() {
+            //播放下一首歌曲
+        };
+        this.prev = function() {
+            //播放上一首歌曲
+        };
+        this.upVolume = function() {
+            //增加音量
+        };
+        this.downVolume = function() {
+            //减少音量
+        };
+        this.mute = function() {
+            //静音
+        };
+    }
+    $(document).ready(function() {
+        (function(){
+            var audio = new AudioObj();
+            audio.getPlayList();
+            var playlist = $("#audio-playlist").get(0);
+//            console.log(playlist);
+//            for(var i = 0; i<length; i++) {
+//                playlist[i].onclick = function(){
+//                    return function(){
+//                        target.switchAudio($(this));
+//                    };
+//                }();
+//            }
+//            $("#play-pause").click = function(){
+//                if()
+//                target.start();
+//            };
+        })();    
+    });
+    </script>
+</head>
+<body>
+    <audio id="audio">
+        <source title="" src="" data-id=""></source>
+    </audio>
+    <div id="audio-player">
+        <div class="audio-box overflow">
+            <div class="audio-detail">
+                <img src="images/golden-wheat-field.jpg" alt="golden-wheat">
+                <div class="audio-descript">
+                    <span id="audio-title">In The Moment of Inspiration</span>
+                    <i id="audio-musician">By pinkzebra AudioJungle</i>
+                </div>
+            </div>
+            <div class="audio-controls" class="overflow">
+                <div class="play-control">
+                    <span id="prev"></span>
+                    <span id="play-pause"></span>
+                    <span id="next"></span>
+                </div>
+                <span id="loop-control"></span>
+                <div class="volume-control">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="playlist-box">
+<!--
+            <ol id="audio-playlist">
+                <li class="hovered">
+                    <span class="title" data-id="1">In The Moment of Inspiration</span>
+                    <span class="audio-time">02:34</span>
+                </li>
+                <li>                    
+                    <span class="title" data-id="2">Inspiring Ideas into Motion</span>
+                    <span class="audio-time">02:34</span>
+                </li>
+            </ol>
+-->
+        </div> 
+    </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "src": "music/The End Of The World.mp3",
+        "title": "The End Of The World",
+        "musician": "unknown"
+    },
+    {
+        "id": 2,
+        "src": "music/小野丽莎-I Wish You Love.mp3",
+        "title": "I Wish You Love",
+        "musician": "小野丽莎"
+    },
+    {
+        "id": 3,
+        "src": "music/邓紫棋-后会无期.mp3",
+        "title": "后会无期",
+        "musician": "邓紫棋"
+    }
+]

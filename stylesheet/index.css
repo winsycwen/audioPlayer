@@ -1,0 +1,126 @@
+.overflow {
+    overflow: hidden;
+}
+#audio-player {
+    width: 350px;
+    height: 270px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    background: -webkit-linear-gradient(top, #444444, #111111);
+    background: -moz-linear-gradient(top, #424242, #121212);
+    background: -o-linear-gradient(top, #424242, #121212);
+    background: -ms-linear-gradient(top, #424242, #121212);
+}
+.audio-box {
+    padding: 16px 12px 0px 12px;
+}
+.audio-detail {
+    position: relative;
+}
+.audio-detail img {
+    float: left;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+}
+.audio-descript {
+    position: relative;
+    font-size: 14px;
+    left: 10px;
+}
+.audio-descript span {
+    display: block;
+    color: #EEEEEE;
+    font-family: "Raleway",Arial,sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+}
+.audio-descript i {
+    display: block;
+    color: #DDDDDD;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+.audio-controls {
+    position: relative;
+    margin-top: 20px;
+    left: 5px;
+}
+.play-control {
+    display: inline-block;
+}
+#prev, #play-pause, #next {
+    display: block;
+    float: left;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+}
+#prev {
+    background: url("../images/prevnext.png");
+}
+#prev:hover {
+    background-position: 0 48px;
+}
+#play-pause {
+    background: url("../images/playpause.png");
+}
+#play-pause:hover {
+    background-position: 0 48px;
+}
+#next {
+    background: url("../images/prevnext.png") 48px 0;
+}
+#next:hover {
+    background-position: 48px 48px;
+}
+#loop-control {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url("../images/loop.png") 48px 0;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+#loop-control:hover {
+    background-position: 50% 100%;
+}
+.volume-control {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url("../images/volume.png");
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+.volume-control:hover {
+    background-position: 0 100%;
+}
+.playlist-box {
+    padding: 0 12px;
+}
+.playlist-box ol {
+    padding: 0 0 0 1em;
+}
+.playlist-box li {
+    color: #999;
+    line-height: 20px;
+    font-size: 12px;
+    font-family: 'Open Sans', Arial, sans-serif;
+    cursor: pointer;
+}
+.playlist-box li:hover {
+    color: #EEEEEE;
+}
+.playlist-box .hovered {
+    color: #EEEEEE;
+}
+.playlist-box .audio-time {
+    float: right;
+}
