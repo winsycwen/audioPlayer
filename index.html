@@ -28,18 +28,30 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
         <section id="main_content" class="inner">
-            <div class="audio-controls" class="overflow">
-                <div class="play-control">
-                    <span id="prev" title="上一首"></span>
-                    <span id="play-pause" title="播放"></span>
-                    <span id="next" title="下一首"></span>
+            <audio id="audio"></audio>
+            <div id="audio-player">
+                <div class="audio-box overflow">
+                    <div class="audio-detail">
+                        <img src="images/golden-wheat-field.jpg" alt="golden-wheat">
+                        <div class="audio-descript">
+                            <span id="audio-title"></span>
+                            <i id="audio-musician"></i>
+                        </div>
+                    </div>
+                    <div class="audio-controls" class="overflow">
+                        <div class="play-control">
+                            <span id="prev" title="上一首"></span>
+                            <span id="play-pause" title="播放"></span>
+                            <span id="next" title="下一首"></span>
+                        </div>
+                        <span id="loop-control" title="顺序播放" data-loop-id="1"></span>
+                        <div class="volume-control">
+                            <span></span>
+                        </div>
+                    </div>
                 </div>
-                <span id="loop-control" title="顺序播放" data-loop-id="1"></span>
-                <div class="volume-control">
-                    <span></span>
-                </div>
+                <div class="playlist-box"></div> 
             </div>
-            <div class="playlist-box"></div> 
         </section>
     </div>
 
