@@ -35,7 +35,7 @@ function AudioObj() {
                 $audioItem.click(function (e) {
                         that.lastIndex = that.currentIndex;
                         that.currentIndex = $(e.target).find(".title").attr("data-id")-1;
-                        that.switchAudio(this);
+                        switchAudio(this);
                 });
                 //把每个歌曲对象存进audioList数组
                 that.audioList.push(val);
