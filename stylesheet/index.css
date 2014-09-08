@@ -84,12 +84,12 @@
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url("../images/loop.png") 48px 0;
+    background: url("../images/loop.png") 0 0;
     margin-bottom: 12px;
     cursor: pointer;
 }
 #loop-control:hover {
-    background-position: 50% 100%;
+    background-position: 0% 100%;
 }
 .volume-control {
     display: inline-block;
