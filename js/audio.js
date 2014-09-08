@@ -33,9 +33,18 @@ function AudioObj() {
                 $audioItem.append($musician);
                 $("#audio-playlist").append($audioItem);
                 $audioItem.click(function (e) {
-                        that.lastIndex = that.currentIndex;
+                    that.lastIndex = that.currentIndex;
+                    //获取点击对象，这里处理得不好
+                    if($(e.target).is("li")) {
                         that.currentIndex = $(e.target).find(".title").attr("data-id")-1;
-                        switchAudio(this);
+                    }
+                    if($(e.target).is("span.title")) {
+                        that.currentIndex = $(e.target).attr("data-id")-1;
+                    }
+                    if($(e.target).is("span.audio-time")) {
+                        that.currentIndex = $(e.target).parent().find(".title").attr("data-id")-1;
+                    }
+                    switchAudio(this);
                 });
                 //把每个歌曲对象存进audioList数组
                 that.audioList.push(val);
