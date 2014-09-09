@@ -9,10 +9,16 @@
     -moz-border-radius: 3px;
     -o-border-radius: 3px;
     -ms-border-radius: 3px;
-    background: -webkit-linear-gradient(top, #444444, #111111);
-    background: -moz-linear-gradient(top, #424242, #121212);
-    background: -o-linear-gradient(top, #424242, #121212);
-    background: -ms-linear-gradient(top, #424242, #121212);
+    background-image: -webkit-linear-gradient(top, #444444, #111111);
+    background-image: -moz-linear-gradient(top, #444444, #111111);
+    background-image: -o-linear-gradient(top, #444444, #111111);
+    background-image: -ms-linear-gradient(top, #444444, #111111);
+    background-image: linear-gradient(to bottom, #444444 0%, #111111 100%);
+    -webkit-box-shadow: inset 0 1px 0 rgba( 255, 255, 255, 0.15 ), 0 0 3px rgba( 0, 0, 0, 0.5 );
+    -moz-box-shadow: inset 0 1px 0 rgba( 255, 255, 255, 0.15 ), 0 0 3px rgba( 0, 0, 0, 0.5 );
+    -o-box-shadow: inset 0 1px 0 rgba( 255, 255, 255, 0.15 ), 0 0 3px rgba( 0, 0, 0, 0.5 );
+    -ms-box-shadow: inset 0 1px 0 rgba( 255, 255, 255, 0.15 ), 0 0 3px rgba( 0, 0, 0, 0.5 );
+    box-shadow: inset 0 1px 0 rgba( 255, 255, 255, 0.15 ), 0 0 3px rgba( 0, 0, 0, 0.5 );
 }
 .audio-box {
     padding: 16px 12px 0px 12px;
@@ -92,15 +98,36 @@
     background-position: 0% 100%;
 }
 .volume-control {
+    position: relative;
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url("../images/volume.png");
+    background: url("../images/volume.png") 0 0;
     margin-bottom: 12px;
     cursor: pointer;
 }
 .volume-control:hover {
     background-position: 0 100%;
+}
+#bar {
+    position: absolute;
+    top: -75px;
+    width: 24px;
+    height: 75px;
+    background-image: -webkit-linear-gradient(top, #464444, #111111);
+    background-image: -moz-linear-gradient(top, #464444, #111111);
+    background-image: -o-linear-gradient(top, #464444, #111111);
+    background-image: -ms-linear-gradient(top, #464444, #111111);
+    background-image: linear-gradient(to bottom,#464444 0%,#111111 100%);
+    border-radius: 3px;
+    box-shadow: 1px -1px 3px black;
+    display: none;
+}
+#test {
+    background-color: rgb(250, 183, 41);
+    position: absolute;
+    left: 8px;
+    top: 8px;
 }
 .playlist-box {
     padding: 0 12px;
