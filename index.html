@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Audioplayer : 这是一个简易的html5音乐播放器">
-    <title>Audioplayer</title>
     <title>HTML5 Audio Player with Playelist</title>
     <script type="text/javascript" src="jquery/jquery-2.1.1.min.js"></script>
     <link rel="stylesheet" href="stylesheet/index.css"/>
@@ -29,11 +26,14 @@
                 </div>
                 <span id="loop-control" title="顺序播放" data-loop-id="1"></span>
                 <div class="volume-control">
-                    <span></span>
+                    <span id="bar">
+                        <canvas id="test" height="60" width="8"></canvas>
+                    </span>
                 </div>
             </div>
         </div>
         <div class="playlist-box"></div> 
     </div>
+    <canvas id="testtest" height="60" width="8"></canvas>
 </body>
 </html>
