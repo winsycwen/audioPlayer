@@ -6,18 +6,6 @@
     <script type="text/javascript" src="jquery/jquery-2.1.1.min.js"></script>
     <link rel="stylesheet" href="stylesheet/index.css"/>
     <script type="text/javascript" src="js/audio.js"></script>
-<!--
-    <script type="text/javascript">
-    $(document).ready(function(){
-        var canvas = $("#testtest").get(0),
-            context = canvas.getContext("2d");
-        context.save();
-        context.fillStyle = "rgb(250, 183, 41);";
-        context.fillRect(0, 10, 50, 10);
-        context.restore();
-    });
-    </script>
--->
 </head>
 <body>
     <audio id="audio"></audio>
@@ -38,7 +26,9 @@
                 </div>
                 <span id="loop-control" title="顺序播放" data-loop-id="1"></span>
                 <div class="volume-control">
-                    <span id="bar"><canvas id="test" height="60" width="8"></canvas></span>
+                    <span id="bar">
+                        <canvas id="test" height="60" width="8"></canvas>
+                    </span>
                 </div>
             </div>
         </div>
