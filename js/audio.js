@@ -11,13 +11,14 @@ function AudioObj() {
         return AudioObj.unique;
     }
     AudioObj.unique = this;
-    var mode = [{id: 1, title: "顺序播放"}, {id: 2, title: "列表循环"}, {id: 3, title: "单曲循环"}];
-    this.currentMode = 1;
+    var mode = [{id: 1, title: "顺序播放"}, {id: 2, title: "列表循环"}, {id: 3, title: "单曲循环"}],
+        time = null;
     this.audio = $("#audio").get(0);
     this.audioList = [];
     this.currentIndex = 0;
+    this.currentMode = 1;
+    this.currentVolume = 1;
     this.lastIndex = 0;
-    this.curretnTime = "";
     this.status = false;  //暂停："paused";未开始："unstart";已开始: "started"
 
     function getPlayList() {
@@ -110,7 +111,79 @@ function AudioObj() {
         $("#loop-control").click(function(e) {
             changeCssStyle("mode", e.target);
         });
-        //静音模式切换
+        //音量控制
+        $(".volume-control").click(function(e){
+            if($(e.target).is("div")) {
+                that.audio.muted = !that.audio.muted;
+                changeCssStyle("mute");
+                if(that.audio.muted) {
+                    that.currentVolume = that.audio.volume;
+                    drawBar($("#test").get(0), $("#test").get(0).height, "mute");
+                } else {
+                    restoreBar($("#test").get(0), $("#test").get(0).height);
+                }
+            }
+        });
+        $(".volume-control").mouseover(function(e){
+            if($("#bar").css("display") === "none") {
+                $("#bar").fadeIn().css("display","block");
+                clearTimeout(time);
+            }
+        });
+        $(".volume-control").mouseleave(function(e){       
+            time = setTimeout(function(){
+                $("#bar").fadeOut();
+            },800);
+        });
+        $("#test").mousedown(function(e){
+            if(e.button === 0) {
+                //按下左键鼠标
+                drawBar(e.target, e.clientY,"count");
+                $(this).bind("mousemove",function(e){
+                    if(e.button === 0) {
+                        drawBar(e.target, e.clientY,"count");
+                    }
+                });
+                $(this).mouseup(function(){
+                    $(this).unbind("mousemove");
+                });
+            }
+        });
+        $("#test").mouseleave(function(){
+            $(this).unbind("mousemove");
+        });
+    }
+    function restoreBar(obj, currentY) {
+        var canvas = obj,
+            context = canvas.getContext("2d"),
+            height =  obj.height,
+            width = obj.width,
+            beforeHeight = height*(1-that.currentVolume);
+        context.save();
+        context.fillStyle = "#222";
+        context.fillRect(0, 0, width, beforeHeight);
+        context.restore();
+        context.save();
+        context.fillStyle = "rgb(250, 183, 41);";
+        context.fillRect(0, beforeHeight, width, height - beforeHeight-1);
+        context.restore();
+        that.controlVolume("restore",height - beforeHeight - 1, height);
+    }
+    function drawBar(obj, currentY, flag) {
+        var canvas = obj,
+            context = canvas.getContext("2d"),
+            height =  flag === "count" ? obj.offsetHeight: obj.height,
+            width = flag === "count" ? obj.offsetWidth : obj.width,
+            volumeReduced = flag === "count" ? currentY - 29 : currentY;
+        context.save();
+        context.fillStyle = "#222";
+        context.fillRect(0, 0, width, volumeReduced);
+        context.restore();
+        context.save();
+        context.fillStyle = "rgb(250, 183, 41);";
+        context.fillRect(0, volumeReduced, width, height - volumeReduced);
+        context.restore();
+        that.controlVolume("draw",height - volumeReduced, height);
     }
     function changeCssStyle(flag, obj) {
         switch(flag) {
@@ -119,7 +192,7 @@ function AudioObj() {
                 $("#play-pause").attr("title","播放");
                 break;
             case "play":
-                $("#play-pause").css("background-position","48px 0");
+                $("#play-pause").css("background-position","100% 0");
                 $("#play-pause").attr("title","暂停");
                 break;
             case "pause":
@@ -132,6 +205,13 @@ function AudioObj() {
                 break;
             case "mode":
                 changeMode(obj);
+                break;
+            case "mute":
+                if(that.audio.muted) {
+                    $(".volume-control").css("background-position", "100% 0");
+                } else {
+                    $(".volume-control").css("background-position", "0 0");
+                }
                 break;
             default: console.log("Fail to change css style!");
         }
@@ -212,14 +292,14 @@ function AudioObj() {
         }
         changeCssStyle("prev", $("#audio-playlist li").eq(that.currentIndex).get(0));
     };
-    this.upVolume = function() {
-        //增加音量
-    };
-    this.downVolume = function() {
-        //减少音量
-    };
-    this.mute = function() {
-        //静音
+    this.controlVolume = function(flag, current, total) {
+        //控制音量
+        that.audio.volume = current/total;
+        if(flag === "draw" && that.audio.volume !==0) {
+            that.currentVolume = that.audio.volume;
+        }
+        that.audio.muted = that.audio.volume === 0 ? true : false;
+        changeCssStyle("mute");
     };
 }
 $(document).ready(function() {
