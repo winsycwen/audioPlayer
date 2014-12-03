@@ -3,7 +3,7 @@
 }
 #audio-player {
     width: 350px;
-    height: 270px;
+    padding-bottom: 10px;
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -123,7 +123,7 @@
     box-shadow: 1px -1px 3px black;
     display: none;
 }
-#test {
+#volume-bar {
     background-color: rgb(250, 183, 41);
     position: absolute;
     left: 8px;

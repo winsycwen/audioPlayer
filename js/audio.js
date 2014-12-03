@@ -21,7 +21,7 @@ function AudioObj() {
     this.lastIndex = 0;
     this.status = false;  //暂停："paused";未开始："unstart";已开始: "started"
 
-    function getPlayList() {
+    function getPlayList(callback) {
         //读取JSON文件，生成歌曲列表，并存放每首歌曲的信息进audioList数组
         $.getJSON("audio.json", function (data) {
             $(".playlist-box").append("<ol id='audio-playlist'></ol>");
@@ -33,40 +33,43 @@ function AudioObj() {
                 $audioItem.append($title);
                 $audioItem.append($musician);
                 $("#audio-playlist").append($audioItem);
-                $audioItem.click(function (e) {
-                    that.lastIndex = that.currentIndex;
-                    //获取点击对象，这里处理得不好
-                    if($(e.target).is("li")) {
-                        that.currentIndex = $(e.target).find(".title").attr("data-id")-1;
-                    }
-                    if($(e.target).is("span.title")) {
-                        that.currentIndex = $(e.target).attr("data-id")-1;
-                    }
-                    if($(e.target).is("span.audio-time")) {
-                        that.currentIndex = $(e.target).parent().find(".title").attr("data-id")-1;
-                    }
-                    switchAudio(this);
-                });
                 //把每个歌曲对象存进audioList数组
                 that.audioList.push(val);
             });
             //修改source标签的src属性，加载音乐
-            var $audio = $("<source>").attr("src", that.audioList[that.currentIndex]["src"]);
-            $("#audio").append($audio);
+//            var $audio = $("<source>").attr("src", that.audioList[that.currentIndex]["src"]);
+//            $("#audio").append($audio);
+            $("#audio").attr("src", that.audioList[that.currentIndex]["src"]);
             $("#audio-playlist li").first().addClass("hovered");
             $("#audio-title").html(that.audioList[that.currentIndex]["title"]);
             $("#audio-musician").html(that.audioList[that.currentIndex]["musician"]);
+            if(callback && typeof(callback) === "function") {
+                callback();
+            }
         });
     }
     
     this.init = function() {
-        getPlayList();
-        playSystem();
+        getPlayList(playSystem);
     };
     function playSystem() {
         //绑定监听事件
+        var $playlist = $("#audio-playlist");
+        $playlist.click(function (e) {
+            that.lastIndex = that.currentIndex;
+            if($(e.target).is("li")) {
+                that.currentIndex = $(e.target).find(".title").attr("data-id")-1;
+            }
+            if($(e.target).is("span.title")) {
+                that.currentIndex = $(e.target).attr("data-id")-1;
+            }
+            if($(e.target).is("span.audio-time")) {
+                that.currentIndex = $(e.target).parent().find(".title").attr("data-id")-1;
+            }
+            switchAudio(this);
+        });
         //播放/暂停事件，如果status为true，则表示当前歌曲正在播放，那么暂停当前歌曲；否则，播放当前歌曲。
-         $("#play-pause").click(function(){
+        $("#play-pause").click(function(){
             if(that.status) {
                 that.pause();
             } else {
@@ -116,12 +119,7 @@ function AudioObj() {
             if($(e.target).is("div")) {
                 that.audio.muted = !that.audio.muted;
                 changeCssStyle("mute");
-                if(that.audio.muted) {
-                    that.currentVolume = that.audio.volume;
-                    drawBar($("#test").get(0), $("#test").get(0).height, "mute");
-                } else {
-                    restoreBar($("#test").get(0), $("#test").get(0).height);
-                }
+                drawBar($("#volume-bar").get(0), "mute");
             }
         });
         $(".volume-control").mouseover(function(e){
@@ -135,13 +133,13 @@ function AudioObj() {
                 $("#bar").fadeOut();
             },800);
         });
-        $("#test").mousedown(function(e){
+        $("#volume-bar").mousedown(function(e){
             if(e.button === 0) {
                 //按下左键鼠标
-                drawBar(e.target, e.clientY,"count");
+                drawBar(e.target, "count", e.clientY);
                 $(this).bind("mousemove",function(e){
                     if(e.button === 0) {
-                        drawBar(e.target, e.clientY,"count");
+                        drawBar(e.target, "count", e.clientY);
                     }
                 });
                 $(this).mouseup(function(){
@@ -149,41 +147,47 @@ function AudioObj() {
                 });
             }
         });
-        $("#test").mouseleave(function(){
+        $("#volume-bar").mouseleave(function(){
             $(this).unbind("mousemove");
         });
     }
-    function restoreBar(obj, currentY) {
+    function drawBar(obj, flag, currentY) {
         var canvas = obj,
             context = canvas.getContext("2d"),
-            height =  obj.height,
+            height = obj.height,
             width = obj.width,
-            beforeHeight = height*(1-that.currentVolume);
-        context.save();
-        context.fillStyle = "#222";
-        context.fillRect(0, 0, width, beforeHeight);
-        context.restore();
-        context.save();
-        context.fillStyle = "rgb(250, 183, 41);";
-        context.fillRect(0, beforeHeight, width, height - beforeHeight-1);
-        context.restore();
-        that.controlVolume("restore",height - beforeHeight - 1, height);
-    }
-    function drawBar(obj, currentY, flag) {
-        var canvas = obj,
-            context = canvas.getContext("2d"),
-            height =  flag === "count" ? obj.offsetHeight: obj.height,
-            width = flag === "count" ? obj.offsetWidth : obj.width,
-            volumeReduced = flag === "count" ? currentY - 29 : currentY;
+            volumeReduced = 0;
+        if(flag === "mute") {
+            if(that.audio.muted) {
+                //已静音
+                volumeReduced = height;
+            } else {
+                volumeReduced = (1-that.currentVolume) * height;
+            }
+        } else if(typeof currentY === "number") {
+            if(that.audio.muted) {
+                that.audio.muted = !that.audio.muted;
+                changeCssStyle("mute");
+            }
+            volumeReduced = currentY - $("#volume-bar").offset().top;
+            that.currentVolume = (1-volumeReduced/height).toFixed(2);
+            that.audio.volume = that.currentVolume;
+            if(volumeReduced === height - 1) {
+                volumeReduced = height;
+                that.audio.muted = !that.audio.muted;
+                changeCssStyle("mute");
+            }
+        } else {
+            console.log("Volume Error!");
+        }
         context.save();
         context.fillStyle = "#222";
         context.fillRect(0, 0, width, volumeReduced);
         context.restore();
         context.save();
-        context.fillStyle = "rgb(250, 183, 41);";
+        context.fillStyle = "rgb(250, 183, 41);";//橙色
         context.fillRect(0, volumeReduced, width, height - volumeReduced);
         context.restore();
-        that.controlVolume("draw",height - volumeReduced, height);
     }
     function changeCssStyle(flag, obj) {
         switch(flag) {
@@ -253,10 +257,11 @@ function AudioObj() {
         $("#audio-playlist li").eq(that.currentIndex).addClass("hovered");
         
         //更换歌曲的目录以及歌曲信息部分的样式
-        $("#audio").empty();
-        var $audio = $("<source>").attr("src", that.audioList[that.currentIndex]["src"]);
-        $("#audio").append($audio);
-        
+//        $("#audio").empty();
+//        var $audio = $("<source>").attr("src", that.audioList[that.currentIndex]["src"]);
+//        $("#audio").append($audio);
+
+        $("#audio").attr("src", that.audioList[that.currentIndex]["src"]);
     }
     this.play = function() {
         that.status= true;
@@ -265,7 +270,7 @@ function AudioObj() {
     };
     this.pause = function() {
         that.status = false;
-        this.audio.pause();
+        that.audio.pause();
         changeCssStyle("pause");
     };
     this.next = function() {
@@ -291,6 +296,10 @@ function AudioObj() {
             that.currentIndex = len-1;
         }
         changeCssStyle("prev", $("#audio-playlist li").eq(that.currentIndex).get(0));
+        if(that.status) {
+            //如果歌曲正在播放，则换歌
+            that.play();
+        }
     };
     this.controlVolume = function(flag, current, total) {
         //控制音量
