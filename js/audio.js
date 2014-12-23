@@ -4,7 +4,6 @@
 *   @音乐播放器，支持播放，暂停，切换下一曲、上一曲，可以单曲循环、列表循环、顺序播放
 */
 function AudioObj() {
-    //返回单例
     "use strict";
     var that = this;
     if (AudioObj.unique !== undefined) {
